@@ -1,0 +1,85 @@
+641. 
+
+class MyCircularDeque {
+    int max;
+    int front = -1;
+    int rear = -1;
+    int deque[];
+
+    public MyCircularDeque(int k) {
+        this.max = k;
+        this.deque = new int[max];
+    }
+    
+    public boolean insertFront(int value) {
+        if(isFull()){
+            return false;
+        } else if(front == -1){
+            front = 0;
+            rear = 0;
+        } else {
+            front = (front - 1 + max) % max;
+        }
+        deque[front] = value;
+        return true;
+    }
+    
+    public boolean insertLast(int value) {
+        if(isFull()){
+            return false;
+        } else if(front == -1){
+            front = 0;
+            rear = 0;
+        } else {
+            rear = (rear + 1) % max;
+        }
+        deque[rear]= value;
+        return true;
+    }
+    
+    public boolean deleteFront() {
+        if(isEmpty()){
+            return false;
+        } else if(front == rear){
+            front = rear = -1;
+        } else {
+            front = (front + 1) % max;
+        }
+        return true;
+    }
+    
+    public boolean deleteLast() {
+        if(isEmpty()){
+            return false;
+        } else if(front == rear){
+            front = rear = -1;
+        } else {
+            rear = (rear - 1 + max) % max;
+        }
+        return true;
+    }
+    
+    public int getFront() {
+        if(isEmpty()){
+            return -1;
+        }
+        return deque[front];
+    }
+    
+    public int getRear() {
+        if(isEmpty()){
+            return -1;
+        }
+        return deque[rear];
+    }
+    
+    public boolean isEmpty() {
+        return front == -1 && rear == -1;
+    }
+    
+    public boolean isFull() {
+        return (rear + 1) % max == front;
+    }
+}
+
+
