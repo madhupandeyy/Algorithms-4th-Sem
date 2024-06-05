@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Topological sorting done by source removal algorithm
+void topologicalSorting(int arr[10][10], int n) {
+    // in[] is the input array that keep the count of sources for each node,
+    // out[] is the output array, s[] is the stack
+    int in[n], out[n], s[n], top = -1;
+    int i, j, k = 0;
+
+    // Initializing the in-degree array
+    for (i = 0; i < n; i++) {
+        in[i] = 0;
+        for (j = 0; j < n; j++) {
+            if (arr[j][i] == 1)
+                in[i]++;
+        }
+    }
+
+    while (1) {
+        // Adding vertices with no incoming edges to the stack
+        for (i = 0; i < n; i++) {
+            if (in[i] == 0) {
+                s[++top] = i;
+                in[i] = -1; // Mark as visited
+            }
+        }
+
+        // If no vertices with 0 in-degree are found and stack is empty, exit loop
+        if (top == -1)
+            break;
+
+        // Popping the top element of the stack
+        out[k] = s[top--];
+
+        // Decrementing in-degrees of connected vertices
+        for (i = 0; i < n; i++) {
+            if (arr[out[k]][i] == 1) {
+                in[i]--;
+            }
+        }
+
+        // Incrementing the index for the output array
+        k++;
+    }
+
+    printf("Topological sorting order is\n");
+    for (i = 0; i < n; i++)
+        printf("%d ", out[i] + 1);
+}
+
+int main() {
+    int n;
+    printf("Enter the number of vertices in graph: ");
+    scanf("%d", &n);
+
+    int arr[10][10];
+
+    printf("Enter the adjacency matrix for the graph\n");
+
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
+            scanf("%d", &arr[i][j]);
+
+    topologicalSorting(arr, n);
+    return 0;
+}
+
+
+//
+Decrementing In-Degrees of Connected Vertices:
+
+Purpose:  When a vertex is removed from the graph (i.e., added to the topological sort order), all its outgoing edges are effectively removed as well.
+          This means that the in-degrees of the vertices at the other ends of these edges must be decremented because one incoming edge to them has been removed.
+Details:
+          for (i = 0; i < n; i++) {     : This loop iterates through all vertices.
+            if (arr[out[k]][i] == 1) {  : Here, out[k] is the vertex just removed from the graph. arr[out[k]][i] == 1 checks if there is an edge from out[k] to vertex i.
+              in[i]--;                  : If there is an edge from out[k] to i, the in-degree of vertex i is decremented by 1, reflecting the removal of that edge.
+
+Incrementing the Index for the Output Array:
+
+Purpose:  The variable k keeps track of the position in the out array where the next vertex should be placed.
+          After a vertex is added to the out array, k is incremented to point to the next empty position.
+Details:
+          k++;                          : This increments the k index to prepare for the next vertex to be placed in the topological sort order.
