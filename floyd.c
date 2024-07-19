@@ -69,4 +69,20 @@ The distance matrix of the graph:
 
 === Code Execution Successful ===
 
+/tmp/E7fgb1AYnS.o
+Enter the number of vertices: 4
+Enter adjacency matrix:
+0 999 3 999
+2 0 999 999
+999 6 0 1
+7 999 999 0
+The distance matrix of the graph:
+0 9 3 4 
+2 0 5 6 
+8 6 0 1 
+7 16 10 0 
+
+
+=== Code Execution Successful ===
+
 */
