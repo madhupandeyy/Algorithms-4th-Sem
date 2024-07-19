@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_ITEMS 100
+
+int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+int knapsack(int m, int n, int profit[], int wt[], int V[MAX_ITEMS + 1][MAX_ITEMS + 1]) {
+    int i, j;
+    for (i = 0; i <= n; i++) {
+        for (j = 0; j <= m; j++) {
+            if (i == 0 || j == 0) {
+                V[i][j] = 0;
+            } else if (j < wt[i - 1]) {
+                V[i][j] = V[i - 1][j];
+            } else {
+                V[i][j] = max(V[i - 1][j], profit[i - 1] + V[i - 1][j - wt[i - 1]]);
+            }
+        }
+    }
+    return V[n][m];
+}
+
+void composition(int n, int m, int V[MAX_ITEMS + 1][MAX_ITEMS + 1], int wt[], int items[], int *count) {
+    int j = m;
+    *count = 0;
+    for (int i = n; i > 0; i--) {
+        if (V[i][j] > V[i - 1][j]) {
+            items[*count] = i;
+            (*count)++;
+            j -= wt[i - 1];
+        }
+    }
+}
+
+void printComposition(int items[], int count) {
+    printf("Items included in the knapsack:\n");
+    for (int i = 0; i < count; i++) {
+        printf("%d ", items[i]);
+    }
+    printf("\n");
+}
+
+void print(int m, int n, int V[MAX_ITEMS + 1][MAX_ITEMS + 1]) {
+    printf("0/1 knapsack problem using (bottom up) dynamic programming approach:\n");
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= m; j++) {
+            printf("%d ", V[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int m, n;
+    printf("Enter the capacity of knapsack:\n");
+    scanf("%d", &m);
+    
+    printf("Enter the number of items:\n");
+    scanf("%d", &n);
+    
+    int profit[n];
+    int wt[n];
+    
+    printf("Enter the weight and values (profit) of items:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Weight and Values of item %d:\n", i + 1);
+        scanf("%d %d", &wt[i], &profit[i]);
+    }
+    
+    int V[MAX_ITEMS + 1][MAX_ITEMS + 1];
+    
+    int maxProfit = knapsack(m, n, profit, wt, V);
+    printf("Maximum profit: %d\n", maxProfit);
+    
+    print(m, n, V);
+    
+    int items[MAX_ITEMS];
+    int count;
+    composition(n, m, V, wt, items, &count);
+    printComposition(items, count);
+    
+    return 0;
+}
+/*
+
+/tmp/lQCFWQWI2i.o
+Enter the capacity of knapsack:
+5
+Enter the number of items:
+4
+Enter the weight and values (profit) of items:
+Weight and Values of item 1:
+2 12
+Weight and Values of item 2:
+1 10
+Weight and Values of item 3:
+3 20
+Weight and Values of item 4:
+2 15
+Maximum profit: 37
+0/1 knapsack problem using (bottom up) dynamic programming approach:
+0 0 0 0 0 0 
+0 0 12 12 12 12 
+0 10 12 22 22 22 
+0 10 12 22 30 32 
+0 10 15 25 30 37 
+Items included in the knapsack:
+4 2 1 
+
+
+=== Code Execution Successful ===
+
+*/
