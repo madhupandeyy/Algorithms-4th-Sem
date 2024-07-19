@@ -23,16 +23,17 @@ int knapsack(int m, int n, int profit[], int wt[], int V[MAX_ITEMS + 1][MAX_ITEM
     return V[n][m];
 }
 
-void composition(int n, int m, int V[MAX_ITEMS + 1][MAX_ITEMS + 1], int wt[], int items[], int *count) {
+int composition(int n, int m, int V[MAX_ITEMS + 1][MAX_ITEMS + 1], int wt[], int items[]) {
     int j = m;
-    *count = 0;
+    int count = 0;
     for (int i = n; i > 0; i--) {
         if (V[i][j] > V[i - 1][j]) {
-            items[*count] = i;
-            (*count)++;
+            items[count] = i;
+            count++;
             j -= wt[i - 1];
         }
     }
+    return count;
 }
 
 void printComposition(int items[], int count) {
@@ -78,38 +79,43 @@ int main() {
     print(m, n, V);
     
     int items[MAX_ITEMS];
-    int count;
-    composition(n, m, V, wt, items, &count);
+    int count = composition(n, m, V, wt, items);
     printComposition(items, count);
     
     return 0;
 }
+
 /*
 
-/tmp/lQCFWQWI2i.o
+/tmp/rzBim3cLvv.o
 Enter the capacity of knapsack:
-5
+6
 Enter the number of items:
-4
+5
 Enter the weight and values (profit) of items:
 Weight and Values of item 1:
-2 12
+3 25
 Weight and Values of item 2:
-1 10
+2 20
 Weight and Values of item 3:
-3 20
+1 15
 Weight and Values of item 4:
-2 15
-Maximum profit: 37
+4 40
+Weight and Values of item 5:
+5 50
+Maximum profit: 65
 0/1 knapsack problem using (bottom up) dynamic programming approach:
-0 0 0 0 0 0 
-0 0 12 12 12 12 
-0 10 12 22 22 22 
-0 10 12 22 30 32 
-0 10 15 25 30 37 
+0 0 0 0 0 0 0 
+0 0 0 25 25 25 25 
+0 0 20 25 25 45 45 
+0 15 20 35 40 45 60 
+0 15 20 35 40 55 60 
+0 15 20 35 40 55 65 
 Items included in the knapsack:
-4 2 1 
+5 3 
 
+
+=== Code Execution Successful ===
 
 === Code Execution Successful ===
 
